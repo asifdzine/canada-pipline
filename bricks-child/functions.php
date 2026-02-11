@@ -16,6 +16,7 @@ add_action( 'init', function() {
   $element_files = [
     __DIR__ . '/elements/title.php',
     __DIR__ . '/elements/custom-tabs.php',
+    __DIR__ . '/elements/posts-slider.php',
   ];
 
   foreach ( $element_files as $file ) {
