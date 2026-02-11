@@ -106,7 +106,7 @@ class Element_Posts_Slider extends \Bricks\Element {
 
     // Slider settings
     $slidesPerView = isset($settings['slides_per_view']) ? $settings['slides_per_view'] : 3;
-    $spaceBetween = isset($settings['space_between']) ? $settings['space_between'] : 30;
+    $spaceBetween = isset($settings['space_between']) ? $settings['space_between'] : 24;
     
     // Unique ID
     $id = 'swiper-' . $this->id;
@@ -192,7 +192,7 @@ class Element_Posts_Slider extends \Bricks\Element {
               }
 
               const slidesPerView = parseInt(el.getAttribute('data-slides-per-view') || 3);
-              const spaceBetween = parseInt(el.getAttribute('data-space-between') || 30);
+              const spaceBetween = parseInt(el.getAttribute('data-space-between') || 24);
               
               new Swiper('#' + id, {
                   slidesPerView: 1,
