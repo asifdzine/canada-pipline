@@ -1,0 +1,353 @@
+<?php 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
+class Element_Custom_Tabs extends \Bricks\Element {
+  public $category     = 'custom';
+  public $name         = 'custom-tabs';
+  public $icon         = 'fas fa-columns'; 
+  public $css_selector = '.custom-tabs-wrapper'; 
+  public $scripts      = ['customTabsScript']; 
+
+  public function get_label() {
+    return esc_html__( 'Custom Tabs', 'bricks' );
+  }
+
+  public function set_controls() {
+    // --- TABS REPEATER ---
+    $this->controls['tabs'] = [
+      'tab'     => 'content',
+      'label'   => esc_html__( 'Tabs', 'bricks' ),
+      'type'    => 'repeater',
+      'titleProperty' => 'label',
+      'fields'  => [
+        'label' => [
+          'label'       => esc_html__( 'Tab Label', 'bricks' ),
+          'type'        => 'text',
+          'default'     => 'New Tab',
+        ],
+        'title' => [
+          'label'       => esc_html__( 'Content Title', 'bricks' ),
+          'type'        => 'text',
+        ],
+        'image' => [
+          'label'       => esc_html__( 'Image', 'bricks' ),
+          'type'        => 'image',
+        ],
+        'text' => [
+          'label'       => esc_html__( 'Description', 'bricks' ),
+          'type'        => 'textarea', // or 'editor' for rich text
+        ],
+        'btn_text' => [
+          'label'       => esc_html__( 'Button Text', 'bricks' ),
+          'type'        => 'text',
+        ],
+        'btn_link' => [
+          'label'       => esc_html__( 'Button Link', 'bricks' ),
+          'type'        => 'link',
+        ],
+      ],
+      'default' => [
+        [
+          'label' => 'Tab 1',
+          'title' => 'Title 1',
+          'text'  => 'Description for tab 1.',
+        ],
+        [
+          'label' => 'Tab 2',
+          'title' => 'Title 2',
+          'text'  => 'Description for tab 2.',
+        ],
+      ],
+    ];
+
+    // --- BOTTOM BUTTONS REPEATER ---
+    $this->controls['bottom_buttons'] = [
+      'tab'     => 'content',
+      'label'   => esc_html__( 'Bottom Buttons', 'bricks' ),
+      'type'    => 'repeater',
+      'titleProperty' => 'text',
+      'fields'  => [
+        'text' => [
+          'label' => esc_html__( 'Button Text', 'bricks' ),
+          'type'  => 'text',
+          'default' => 'Button',
+        ],
+        'link' => [
+          'label' => esc_html__( 'Button Link', 'bricks' ),
+          'type'  => 'link',
+        ],
+      ],
+      'default' => [
+        [ 'text' => 'Publications' ],
+        [ 'text' => 'Expert Insights' ],
+      ],
+    ];
+
+    // --- STYLING CONTROLS (Optional but good for basic customization) ---
+    $this->controls['primaryColor'] = [
+       'tab' => 'style',
+       'label' => 'Active Color',
+       'type' => 'color',
+       'default' => '#7b1fa2', // Purple-ish
+       'css' => [
+          [
+             'property' => 'background-color',
+             'selector' => '.tab-button.active, .tab-button:hover',
+          ],
+          [
+              'property' => 'color',
+              'selector' => '.tab-content h3',
+          ]
+       ]
+    ];
+  }
+
+  public function render() {
+    $settings = $this->settings;
+    $tabs = isset($settings['tabs']) ? $settings['tabs'] : [];
+    $bottom_buttons = isset($settings['bottom_buttons']) ? $settings['bottom_buttons'] : [];
+
+    if ( empty( $tabs ) ) {
+      return $this->render_element_placeholder( [
+        'title' => esc_html__( 'No tabs found.', 'bricks' ),
+      ] );
+    }
+
+    echo "<div {$this->render_attributes( '_root' )}>";
+    
+    // --- NAV COLUMN ---
+    echo '<div class="custom-tabs-nav">';
+    
+    // Tabs List
+    echo '<div class="tabs-list">';
+    foreach ( $tabs as $index => $tab ) {
+      $class = $index === 0 ? 'active' : '';
+      echo "<button class='tab-button {$class}' data-target='tab-{$index}'>";
+      echo esc_html( $tab['label'] );
+      echo "</button>";
+    }
+    echo '</div>'; // .tabs-list
+
+    // Bottom Buttons
+    if ( ! empty( $bottom_buttons ) ) {
+        echo '<div class="tabs-bottom-buttons">';
+        foreach ( $bottom_buttons as $btn ) {
+            $text = isset($btn['text']) ? $btn['text'] : '';
+            $link = isset($btn['link']) ? $btn['link'] : [];
+            
+            // Render basic link
+            // Bricks link structure usually is array( type, url, target, etc )
+            // We'll simplify for now, assuming standard array or string url
+            $url = is_array($link) && isset($link['url']) ? $link['url'] : '#';
+            
+            echo "<a href='" . esc_url($url) . "' class='bottom-btn'>" . esc_html($text) . "</a>";
+        }
+        echo '</div>';
+    }
+
+    echo '</div>'; // .custom-tabs-nav
+
+
+    // --- CONTENT COLUMN ---
+    echo '<div class="custom-tabs-content-wrapper">';
+    foreach ( $tabs as $index => $tab ) {
+        $class = $index === 0 ? 'active' : '';
+        $title = isset($tab['title']) ? $tab['title'] : '';
+        $text  = isset($tab['text']) ? $tab['text'] : '';
+        $img_id = isset($tab['image']) ? $tab['image'] : ''; // Bricks image control returns ID usually
+        
+        $btn_text = isset($tab['btn_text']) ? $tab['btn_text'] : '';
+        $btn_links = isset($tab['btn_link']) ? $tab['btn_link'] : [];
+        $btn_url = is_array($btn_links) && isset($btn_links['url']) ? $btn_links['url'] : '#';
+
+        // Check if image is array/id and get url
+        $img_html = '';
+        if ( ! empty( $img_id ) ) {
+           $img_html = wp_get_attachment_image( $img_id, 'large', false, ['class' => 'tab-image'] );
+        }
+
+        echo "<div class='tab-pane {$class}' id='tab-{$index}'>";
+        
+        // Title
+        if($title) echo "<h3>{$title}</h3>";
+
+        // Image
+        if($img_html) echo "<div class='tab-image-wrapper'>{$img_html}</div>";
+
+        // Text
+        if($text) echo "<div class='tab-text'>{$text}</div>";
+
+        // Button
+        if($btn_text) {
+            echo "<a href='{$btn_url}' class='tab-content-btn'>{$btn_text}</a>";
+        }
+
+        echo "</div>"; // .tab-pane
+    }
+    echo '</div>'; // .custom-tabs-content-wrapper
+
+    echo "</div>"; // .custom-tabs-wrapper (root)
+
+    // Inline CSS for structure
+    $this->render_css();
+    
+    // Inline JS for logic
+    $this->render_js();
+  }
+
+  public function render_css() {
+      ?>
+      <style>
+      .custom-tabs-wrapper {
+          display: flex;
+          gap: 40px;
+          flex-wrap: wrap; /* Stack on mobile */
+      }
+      .custom-tabs-nav {
+          flex: 0 0 300px; /* Fixed width for nav */
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+      }
+      .tabs-list {
+          display: flex;
+          flex-direction: column;
+          gap: 15px;
+      }
+      .tab-button {
+          background: #fff;
+          border: 1px solid #7b1fa2; /* fallback color */
+          color: #7b1fa2;
+          padding: 15px 20px;
+          text-align: center;
+          border-radius: 8px;
+          cursor: pointer;
+          font-weight: 600;
+          transition: all 0.3s ease;
+          font-size: 16px;
+      }
+      /* Active state handled by JS adding .active class */
+      .tab-button.active, .tab-button:hover {
+          background-color: #7b1fa2; 
+          color: #fff;
+      }
+      
+      .tabs-bottom-buttons {
+          display: flex;
+          gap: 10px;
+          margin-top: 20px;
+      }
+      .bottom-btn {
+          flex: 1;
+          border: 1px solid #7b1fa2;
+          color: #7b1fa2;
+          padding: 10px;
+          text-align: center;
+          border-radius: 20px;
+          text-decoration: none;
+          font-size: 14px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+      }
+      .bottom-btn:hover {
+          background: #f0f0f0;
+      }
+
+      .custom-tabs-content-wrapper {
+          flex: 1;
+          display: flex;
+          position: relative;
+      }
+      .tab-pane {
+          display: none;
+          width: 100%;
+          animation: fadeIn 0.5s;
+      }
+      .tab-pane.active {
+          display: block;
+      }
+      .tab-pane h3 {
+          color: #7b1fa2;
+          margin-bottom: 20px;
+          font-size: 24px;
+      }
+      .tab-image-wrapper {
+          margin-bottom: 20px;
+      }
+      .tab-image-wrapper img {
+          width: 100%;
+          height: auto;
+          border-radius: 8px;
+          object-fit: cover;
+      }
+      .tab-text {
+          margin-bottom: 25px;
+          line-height: 1.6;
+          color: #333;
+      }
+      .tab-content-btn {
+          display: inline-block;
+          border: 1px solid #7b1fa2;
+          color: #7b1fa2;
+          padding: 10px 25px;
+          border-radius: 25px;
+          text-decoration: none;
+          font-weight: 600;
+          transition: 0.3s;
+      }
+      .tab-content-btn:hover {
+          background: #7b1fa2;
+          color: #fff;
+      }
+
+      @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+      }
+
+      @media (max-width: 768px) {
+          .custom-tabs-wrapper {
+              flex-direction: column;
+          }
+          .custom-tabs-nav {
+              flex: auto;
+              width: 100%;
+          }
+      }
+      </style>
+      <?php
+  }
+
+  public function render_js() {
+      ?>
+      <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          const wrappers = document.querySelectorAll('.custom-tabs-wrapper');
+          
+          wrappers.forEach(wrapper => {
+              const buttons = wrapper.querySelectorAll('.tab-button');
+              const panes = wrapper.querySelectorAll('.tab-pane');
+
+              buttons.forEach(btn => {
+                  btn.addEventListener('click', function() {
+                      // Remove active from all in this wrapper
+                      buttons.forEach(b => b.classList.remove('active'));
+                      panes.forEach(p => p.classList.remove('active'));
+
+                      // Add active to clicked
+                      this.classList.add('active');
+                      
+                      const targetId = this.getAttribute('data-target');
+                      const targetPane = wrapper.querySelector('#' + targetId);
+                      if(targetPane) {
+                          targetPane.classList.add('active');
+                      }
+                  });
+              });
+          });
+      });
+      </script>
+      <?php
+  }
+}
