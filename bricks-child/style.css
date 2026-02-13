@@ -284,3 +284,108 @@
   /* Space between buttons */
   left: auto;
 }
+
+/* PDF Tech Notes Custom Element CSS */
+.pdf-tech-notes-wrapper {
+  display: flex;
+  gap: 40px;
+  background: #fff;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.tech-note-list-container {
+  width: 410px;
+  flex-shrink: 0;
+  border-right: 1px solid #eee;
+}
+
+.tech-note-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tech-note-item {
+  padding: 15px 20px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s ease;
+  font-family: "Montserrat", sans-serif;
+  color: #555;
+  font-size: 16px;
+}
+
+.tech-note-item:hover {
+  background-color: #f9f9f9;
+  color: #000;
+}
+
+.tech-note-item.active {
+  color: #ed4023;
+  /* Primary Color */
+  font-weight: 600;
+  background-color: #fff;
+}
+
+.tech-note-icon {
+  opacity: 1;
+  /* Always visible */
+  font-size: 0;
+  /* Removing font size for SVG wrapper */
+  line-height: 0;
+}
+
+.tech-note-icon svg {
+  transition: transform 0.2s ease;
+}
+
+.tech-note-icon svg path {
+  transition: fill 0.2s ease;
+  fill: #606060;
+}
+
+.tech-note-item.active .tech-note-icon svg {
+  transform: rotate(90deg);
+}
+
+.tech-note-item.active .tech-note-icon svg path {
+  fill: #ed4023;
+}
+
+.tech-note-preview-container {
+  flex-grow: 1;
+  background: #f4f4f4;
+  min-height: 400px;
+  /* Fallback */
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.tech-note-frame {
+  width: 100%;
+  border: none;
+  display: block;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .pdf-tech-notes-wrapper {
+    flex-direction: column;
+  }
+
+  .tech-note-list-container {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #eee;
+    max-height: 250px;
+    overflow-y: auto;
+  }
+
+  .tech-note-preview-container {
+    width: 100%;
+  }
+}

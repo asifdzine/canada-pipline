@@ -23,6 +23,7 @@ add_action( 'init', function() {
     __DIR__ . '/elements/custom-tabs.php',
     __DIR__ . '/elements/posts-slider.php',
     __DIR__ . '/elements/white-paper-slider.php',
+    __DIR__ . '/elements/pdf-tech-notes.php',
   ];
 
   foreach ( $element_files as $file ) {
