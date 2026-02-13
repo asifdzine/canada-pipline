@@ -10,6 +10,11 @@ add_action( 'wp_enqueue_scripts', function() {
 } );
 
 /**
+ * Include custom post types
+ */
+require_once __DIR__ . '/inc/white-paper-cpt.php';
+
+/**
  * Register custom elements
  */
 add_action( 'init', function() {
@@ -17,6 +22,7 @@ add_action( 'init', function() {
     __DIR__ . '/elements/title.php',
     __DIR__ . '/elements/custom-tabs.php',
     __DIR__ . '/elements/posts-slider.php',
+    __DIR__ . '/elements/white-paper-slider.php',
   ];
 
   foreach ( $element_files as $file ) {
