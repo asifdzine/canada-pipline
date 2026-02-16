@@ -4,18 +4,28 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 class Element_Custom_Tabs extends \Bricks\Element {
   public $category     = 'custom';
   public $name         = 'custom-tabs';
-  public $icon         = 'fas fa-folder'; // Changed icon
-  public $css_selector = '.comp-tabs-wrapper'; // Changed selector base
+  public $icon         = 'fas fa-columns'; // Changed icon
+  public $css_selector = '.comp-tabs-wrapper'; 
+  public $scripts      = ['bricksCustomTabs']; // Register script
 
   public function get_label() {
-    return esc_html__( 'Advanced Tabs', 'bricks' );
+    return esc_html__( 'Custom Image Tabs', 'bricks' );
   }
 
   public function set_controls() {
-    // TABS
+
+      $this->controls['sidebar_heading'] = [
+        'tab' => 'content',
+        'label' => esc_html__( 'Sidebar Title', 'bricks' ),
+        'type' => 'text',
+        'default' => 'Flow Nozzles & Venturis',
+        'placeholder' => 'Enter sidebar Titleng',
+    ];
+
+    // TABS REPEATER
     $this->controls['tabs_list'] = [
       'tab'     => 'content',
-      'label'   => esc_html__( 'Tabs Content', 'bricks' ),
+      'label'   => esc_html__( 'Tabs', 'bricks' ),
       'type'    => 'repeater',
       'titleProperty' => 'tab_label',
       'fields'  => [
@@ -24,71 +34,72 @@ class Element_Custom_Tabs extends \Bricks\Element {
           'type'    => 'text',
           'default' => 'Tab Item',
         ],
+        // LEFT: Content (Image + Text)
         'content_title' => [
           'label' => esc_html__( 'Headline', 'bricks' ),
           'type'  => 'text',
+          'default' => 'Content Title',
         ],
-        'content_image' => [
-          'label' => esc_html__( 'Image', 'bricks' ),
-          'type'  => 'image',
-        ],
-        'content_desc' => [
+        'content_editor' => [
           'label' => esc_html__( 'Description', 'bricks' ),
-          'type'  => 'textarea',
+          'type'  => 'editor', // Rich Text
+          'default' => 'Enter your description here...',
         ],
-        'cta_text' => [
-          'label' => esc_html__( 'Button Label', 'bricks' ),
-          'type'  => 'text',
-        ],
-        'cta_link' => [
-          'label' => esc_html__( 'Button URL', 'bricks' ),
-          'type'  => 'link',
+        
+        // RIGHT: Accordion Repeater (Nested)
+        'accordion_list' => [
+            'label' => esc_html__( 'Accordion Items', 'bricks' ),
+            'type' => 'repeater',
+            'titleProperty' => 'acc_title',
+            'fields' => [
+                'acc_title' => [
+                    'label' => esc_html__( 'Question / Title', 'bricks' ),
+                    'type' => 'text',
+                    'default' => 'Accordion Title',
+                ],
+                'acc_content' => [
+                    'label' => esc_html__( 'Answer / Content', 'bricks' ),
+                    'type' => 'editor', // Changed to editor for Rich Text support
+                    'default' => 'Accordion content goes here.',
+                ],
+            ],
+            'default' => [
+                ['acc_title' => 'Feature 1', 'acc_content' => 'Details about feature 1.'],
+                ['acc_title' => 'Feature 2', 'acc_content' => 'Details about feature 2.'],
+            ]
         ],
       ],
       'default' => [
-         ['tab_label' => 'Tab 1', 'content_title' => 'Content 1'],
-         ['tab_label' => 'Tab 2', 'content_title' => 'Content 2'],
-      ]
-    ];
-
-    // EXTRA BUTTONS
-    $this->controls['extra_buttons'] = [
-      'tab'     => 'content',
-      'label'   => esc_html__( 'Sidebar Buttons', 'bricks' ),
-      'type'    => 'repeater',
-      'titleProperty' => 'label',
-      'fields'  => [
-        'label' => [ 'label' => 'Label', 'type' => 'text' ],
-        'link'  => [ 'label' => 'Link', 'type' => 'link' ],
-      ],
-      'default' => [
-          ['label' => 'Contact Us'],
+         ['tab_label' => 'Tab 1', 'content_title' => 'Overview'],
+         ['tab_label' => 'Tab 2', 'content_title' => 'Details'],
       ]
     ];
     
-    // STYLE - COLOR
-    $this->controls['accent_color'] = [
+    // SIDEBAR SETTINGS
+  
+    
+    // COMPONENT HEADING
+    
+
+    // STYLE SETTINGS
+    $this->controls['primary_color'] = [
         'tab' => 'style',
-        'label' => 'Accent Color',
+        'label' => esc_html__( 'Primary Color', 'bricks' ),
         'type' => 'color',
-        'default' => '#9c27b0',
+        'default' => '#f15a29', // Updated default to orange-red from image
         'css' => [
             [
-                'property' => 'background-color',
-                'selector' => '.comp-tab-btn.active, .comp-tab-btn:hover',
+                'property' => 'color',
+                'selector' => '.comp-tab-btn.active',
             ],
             [
                 'property' => 'color',
-                'selector' => '.comp-tab-content h2',
+                'selector' => '.acc-header.active',
             ],
             [
                 'property' => 'color',
-                'selector' => '.sidebar-btn',
+                'selector' => '.acc-header:hover',
             ],
-            [
-                'property' => 'border-color',
-                'selector' => '.sidebar-btn',
-            ]
         ]
     ];
   }
@@ -96,77 +107,97 @@ class Element_Custom_Tabs extends \Bricks\Element {
   public function render() {
     $settings = $this->settings;
     $tabs = isset($settings['tabs_list']) ? $settings['tabs_list'] : [];
-    $extras = isset($settings['extra_buttons']) ? $settings['extra_buttons'] : [];
+    $sidebarHeading = isset($settings['sidebar_heading']) ? $settings['sidebar_heading'] : '';
+    $componentHeading = isset($settings['component_heading']) ? $settings['component_heading'] : '';
     
     if(empty($tabs)) {
-        echo '<div class="comp-tabs-empty">Please add tabs.</div>';
+        if ( bricks_is_builder_main() ) {
+            echo '<div class="comp-tabs-empty">Please add tabs in the content settings.</div>';
+        }
         return;
     }
 
-    // Unique ID for this block specifically
-    $blockId = 'tabs-' . uniqid();
+    $blockId = 'tabs-' . $this->id;
 
-    echo "<div {$this->render_attributes( '_root' )} id='{$blockId}' data-tabs-container>";
+    echo "<div {$this->render_attributes( '_root' )} id='{$blockId}' class='comp-tabs-wrapper' data-tabs-container>";
     
-    // -- SIDEBAR (LEFT) --
+    if ($componentHeading) {
+        echo "<h2 class='comp-tabs-heading'>{$componentHeading}</h2>";
+    }
+    
+    // 1. Sidebar (Tabs)
+     echo '<div class="tabs-wrapper">';
+    echo '<div class="tabs-sidebar-container">';
     echo '<div class="comp-tabs-sidebar">';
     
-        // Tab Triggers
-        echo '<div class="comp-tabs-nav">';
-        $i = 0;
-        foreach($tabs as $tab) {
-            $isActive = ($i === 0) ? 'active' : '';
-            $label = isset($tab['tab_label']) ? $tab['tab_label'] : 'Tab';
-            
-            // data-tab-target matches the index
-            echo "<button type='button' class='comp-tab-btn {$isActive}' data-tab-target='{$i}'>{$label}</button>";
-            $i++;
-        }
-        echo '</div>'; // nav
+    if ($sidebarHeading) {
+        echo "<h3 class='tabs-sidebar-heading'>{$sidebarHeading}</h3>";
+    }
 
-        // Extra Buttons
-        if(!empty($extras)) {
-            echo '<div class="comp-tabs-extras">';
-            foreach($extras as $ex) {
-                $lbl = isset($ex['label']) ? $ex['label'] : 'Btn';
-                $lnk = isset($ex['link']) ? $ex['link'] : [];
-                $url = (is_array($lnk) && isset($lnk['url'])) ? $lnk['url'] : '#';
-                echo "<a href='{$url}' class='sidebar-btn'>{$lbl}</a>";
-            }
-            echo '</div>';
-        }
+    $i = 0;
+    foreach($tabs as $tab) {
+        $isActive = ($i === 0) ? 'active' : '';
+        $label = isset($tab['tab_label']) ? $tab['tab_label'] : 'Tab ' . ($i+1);
+        
+        echo "<button type='button' class='comp-tab-btn {$isActive}' data-tab-target='{$i}' role='tab' aria-selected='" . ($isActive ? 'true' : 'false') . "'>";
+            echo "<span class='tab-btn-text'>{$label}</span>";
+            // Icons
+            echo "<span class='tab-icon-active'><i class='fas fa-chevron-right'></i></span>";
+            echo "<span class='tab-icon-inactive'><i class='fas fa-chevron-down'></i></span>";
+        echo "</button>";
+        $i++;
+    }
+    echo '</div>'; 
+    echo '</div>'; // tabs-sidebar-container
 
-    echo '</div>'; // sidebar
-
-    // -- CONTENT (RIGHT) --
+    // 2. Content Area
     echo '<div class="comp-tabs-body">';
     $j = 0;
     foreach($tabs as $tab) {
         $isActive = ($j === 0) ? 'active' : '';
         $title = isset($tab['content_title']) ? $tab['content_title'] : '';
-        $desc = isset($tab['content_desc']) ? $tab['content_desc'] : '';
-        $imgRaw = isset($tab['content_image']) ? $tab['content_image'] : '';
-        $ctaTxt = isset($tab['cta_text']) ? $tab['cta_text'] : '';
-        $ctaLnk = isset($tab['cta_link']) ? $tab['cta_link'] : [];
-        $ctaUrl = (is_array($ctaLnk) && isset($ctaLnk['url'])) ? $ctaLnk['url'] : '#';
+        $editor = isset($tab['content_editor']) ? $tab['content_editor'] : '';
+        $accordions = isset($tab['accordion_list']) ? $tab['accordion_list'] : [];
 
-        // Image handling
-        $imgHtml = '';
-        $imgId = (is_array($imgRaw) && isset($imgRaw['id'])) ? $imgRaw['id'] : $imgRaw;
-        if($imgId) {
-            $imgHtml = wp_get_attachment_image($imgId, 'large');
-        }
+        echo "<div class='comp-tab-content {$isActive}' data-tab-index='{$j}' role='tabpanel'>";
+            
+            // Top Section: Image + Text
+            echo '<div class="tab-content-grid">';
+                // Left: Text
+                echo '<div class="tab-text-col">';
+                    if($title) echo "<h2 class='tab-title'>{$title}</h2>";
+                    if($editor) echo "<div class='tab-editor'>{$editor}</div>";
+                echo '</div>';
+            echo '</div>';
 
-        echo "<div class='comp-tab-content {$isActive}' data-tab-index='{$j}'>";
-            if($title) echo "<h2>{$title}</h2>";
-            if($imgHtml) echo "<div class='tab-img'>{$imgHtml}</div>";
-            if($desc) echo "<div class='tab-desc'>{$desc}</div>";
-            if($ctaTxt) echo "<a href='{$ctaUrl}' class='tab-cta'>{$ctaTxt}</a>";
+            // Bottom Section: Accordion
+            if(!empty($accordions)) {
+                echo '<div class="tab-accordion-wrapper">';
+                foreach($accordions as $acc) {
+                    $accTitle = isset($acc['acc_title']) ? $acc['acc_title'] : 'Accordion Title';
+                    $accContent = isset($acc['acc_content']) ? $acc['acc_content'] : '';
+                    
+                    echo '<div class="acc-item">';
+                        echo '<button class="acc-header" type="button">';
+                            echo '<span class="acc-title-text">' . esc_html($accTitle) . '</span>';
+                            echo '<span class="acc-icon"><i class="fas fa-chevron-down"></i></span>';
+                        echo '</button>';
+                        echo '<div class="acc-body">';
+                            echo '<div class="acc-inner">';
+                                echo '<div class="acc-text">' . $accContent . '</div>';
+                            echo '</div>';
+                        echo '</div>';
+                    echo '</div>';
+                }
+                echo '</div>';
+            }
+
         echo "</div>";
         $j++;
     }
     echo '</div>'; // body
 
+    echo "</div>"; // root
     echo "</div>"; // root
 
     $this->render_css();
@@ -176,141 +207,122 @@ class Element_Custom_Tabs extends \Bricks\Element {
   public function render_css() {
       ?>
       <style>
-      .comp-tabs-wrapper {
-          display: flex;
-          gap: 30px;
+      /* Component Heading */
+      .comp-tabs-heading {
           width: 100%;
-      }
-      .comp-tabs-sidebar {
-          width: 250px;
-          flex-shrink: 0;
-          display: flex;
-          flex-direction: column;
-          gap: 30px;
-      }
-      .comp-tabs-nav {
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-      }
-      .comp-tab-btn {
-          padding: 12px 16px;
-          text-align: center;
-          background: #fff;
-          border: 1px solid #ddd;
-          border-radius: 4px;
-          cursor: pointer;
-          font-weight: 500;
-          transition: all 0.2s;
+          font-size: 32px;
+          margin-bottom: 30px;
           color: #333;
+          /* text-align: center; Optional, stick to left or check design */
       }
       
-      .comp-tabs-extras {
+      /* Heading Style */
+      .tabs-sidebar-heading {
+          font-size: 24px;
+          font-weight: 700;
+          color: #0b3b5b; /* Dark blue/black */
+          margin-bottom: 20px;
+          line-height: 1.2;
+      }
+      
+      .comp-tab-btn {
           display: flex;
-          flex-direction: column;
-          gap: 10px;
+          justify-content: space-between;
+          align-items: center;
+          text-align: left;
+          padding: 15px 0; /* Vertical padding only, clean look */
+          background: transparent;
+          border: none;
+          border-bottom: 1px solid #eee; /* Separator lines */
+          cursor: pointer;
+          font-weight: 400;
+          font-size: 16px;
+          color: #555;
+          transition: all 0.2s ease;
+          width: 100%;
       }
-      .sidebar-btn {
-          display: block;
-          text-align: center;
-          padding: 10px;
-          border: 1px solid #9c27b0;
-          border-radius: 20px;
-          text-decoration: none;
-          color: #9c27b0;
-          font-size: 0.9em;
+      .comp-tab-btn:first-of-type {
+          border-top: 1px solid #eee; /* Top separator for first item */
       }
-      .sidebar-btn:hover {
-          background-color: #f5f5f5;
+      
+      .comp-tab-btn:hover {
+          color: #f15a29; /* Hover color same as active */
+          background: transparent; /* No background change */
       }
+      
+      .comp-tab-btn.active {
+          background: transparent;
+          color: #f15a29; /* Active Color (Orange) */
+          font-weight: 600;
+          box-shadow: none;
+          border-left: none; /* Remove previous style */
+      }
+      
+      .tab-icon-active, .tab-icon-inactive {
+          font-size: 12px;
+      }
+      
+      .comp-tab-btn.active .tab-icon-inactive { display: none; }
+      .comp-tab-btn:not(.active) .tab-icon-active { display: none; }
 
-      .comp-tabs-body {
-          flex-grow: 1;
-      }
-      .comp-tab-content {
-          display: none;
-          animation: compFadeIn 0.4s ease;
-      }
-      .comp-tab-content.active {
-          display: block;
-      }
-      .comp-tab-content h2 {
-          margin-top: 0;
-          margin-bottom: 20px;
-      }
-      .tab-img img {
-          max-width: 100%;
-          height: auto;
-          border-radius: 8px;
-          margin-bottom: 20px;
-          display: block;
-      }
-      .tab-desc {
-          margin-bottom: 20px;
-          line-height: 1.6;
-      }
-      .tab-cta {
-          display: inline-block;
-          background: #333;
-          color: #fff;
-          padding: 10px 24px;
-          border-radius: 4px;
-          text-decoration: none;
-      }
-
-      @keyframes compFadeIn {
-          from { opacity: 0; transform: translateY(5px); }
-          to { opacity: 1; transform: translateY(0); }
-      }
-
-      @media(max-width: 768px) {
-          .comp-tabs-wrapper { flex-direction: column; }
-          .comp-tabs-sidebar { width: 100%; }
-      }
+      /* Retain other existing styles if any, but since we are overriding global css, ensure specificity */
       </style>
       <?php
   }
 
   public function render_js() {
-      // Script renders once but handles all instances via delegation
       ?>
       <script>
-      (function(){
-        // Prevent multiple bindings if this renders multiple times in builder
-        if(window.bricksCustomTabsInit) return;
-        window.bricksCustomTabsInit = true;
+      (function() {
+          if (window.bricksCustomTabsInit) return;
+          window.bricksCustomTabsInit = true;
 
-        document.addEventListener('click', function(e) {
-            // Check if clicked element is a tab button
-            const btn = e.target.closest('.comp-tab-btn');
-            if(!btn) return;
+          document.addEventListener('click', function(e) {
+              
+              // --- TABS LOGIC ---
+              const tabBtn = e.target.closest('.comp-tab-btn');
+              if (tabBtn) {
+                  const container = tabBtn.closest('[data-tabs-container]');
+                  if (container) {
+                      e.preventDefault();
+                      
+                      // Remove active class from all buttons and content in THIS container
+                      container.querySelectorAll('.comp-tab-btn').forEach(b => b.classList.remove('active'));
+                      container.querySelectorAll('.comp-tab-content').forEach(c => c.classList.remove('active'));
+                      
+                      // Activate clicked button
+                      tabBtn.classList.add('active');
+                      
+                      // Activate target content
+                      const idx = tabBtn.getAttribute('data-tab-target');
+                      const target = container.querySelector(`.comp-tab-content[data-tab-index="${idx}"]`);
+                      if (target) target.classList.add('active');
+                  }
+              }
 
-            // Find the container
-            const container = btn.closest('[data-tabs-container]');
-            if(!container) return;
-
-            e.preventDefault();
-
-            // Get target index
-            const targetIdx = btn.getAttribute('data-tab-target');
-
-            // Deactivate all buttons in this container
-            const allBtns = container.querySelectorAll('.comp-tab-btn');
-            allBtns.forEach(b => b.classList.remove('active'));
-
-            // Deactivate all content in this container
-            const allContent = container.querySelectorAll('.comp-tab-content');
-            allContent.forEach(c => c.classList.remove('active'));
-
-            // Activate clicked button
-            btn.classList.add('active');
-
-            // Activate target content
-            const targetContent = container.querySelector(`.comp-tab-content[data-tab-index="${targetIdx}"]`);
-            if(targetContent) {
-                targetContent.classList.add('active');
-            }
-        });
+              // --- ACCORDION LOGIC ---
+              const accHeader = e.target.closest('.acc-header');
+              if (accHeader) {
+                  e.preventDefault();
+                  const accItem = accHeader.closest('.acc-item');
+                  const accBody = accItem.querySelector('.acc-body');
+                  
+                  // Toggle Active Class
+                  const isOpen = accHeader.classList.contains('active');
+                  
+                  // Optional: Close other accordions in the same group? 
+                  // Usually accordions inside a section behave independently or as an accordion group.
+                  // Let's implement independent behavior for simplicity unless requested otherwise.
+                  
+                  if (isOpen) {
+                      accHeader.classList.remove('active');
+                      accBody.style.maxHeight = null;
+                  } else {
+                      accHeader.classList.add('active');
+                      accBody.style.maxHeight = accBody.scrollHeight + "px";
+                  }
+              }
+          });
       })();
       </script>
       <?php

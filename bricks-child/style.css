@@ -284,6 +284,7 @@
   /* Space between buttons */
   left: auto;
 }
+
 .brxe-white-paper-slider .swiper-pagination {
   bottom: 0;
 }
@@ -398,5 +399,241 @@
 
   .tech-note-preview-container {
     width: 100%;
+  }
+}
+
+
+
+.tabs-sidebar-container {
+  display: flex;
+  align-items: flex-start;
+  /* Important for sticky sidebar */
+  gap: 40px;
+  margin: 40px 0;
+}
+
+.comp-tabs-wrapper {
+  display: flex;
+  align-items: flex-start;
+  /* Important for sticky sidebar */
+  gap: 40px;
+  margin: 40px 0;
+  position: relative;
+}
+
+.comp-tabs-sidebar {
+  width: 250px;
+  min-width: 200px;
+  /* Prevent squishing too much */
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-right: 1px solid #eee;
+  padding-right: 20px;
+
+  /* Sticky Sidebar */
+  position: -webkit-sticky;
+  position: sticky;
+  top: 40px;
+  max-height: calc(100vh - 80px);
+  overflow-y: auto;
+}
+
+.comp-tabs-sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.comp-tabs-sidebar::-webkit-scrollbar-thumb {
+  background-color: #eee;
+  border-radius: 4px;
+}
+
+.comp-tab-btn {
+  text-align: left;
+  padding: 15px 20px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  color: #555;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+  /* Left border indicator */
+}
+
+.comp-tab-btn:hover {
+  background: #f5f5f5;
+  color: #333;
+}
+
+.comp-tab-btn.active {
+  background: #f0f7ff;
+  color: #007bff;
+  /* Fallback */
+  border-left-color: currentColor;
+  box-shadow: none;
+  /* Cleaner look */
+}
+
+.comp-tabs-body {
+  flex-grow: 1;
+  width: 100%;
+  /* Ensure it takes remaining space */
+  min-width: 0;
+  /* Prevent flex overflow with images/pre tags */
+}
+
+.comp-tab-content {
+  display: none;
+  animation: fadeIn 0.4s ease;
+}
+
+.comp-tab-content.active {
+  display: block;
+}
+
+/* Content Grid */
+.tab-content-grid {
+  /* display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 40px;
+  align-items: start; */
+}
+
+.tabs-wrapper {
+  display: flex;
+  gap: 40px;
+}
+
+.tab-title {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 24px;
+  line-height: 1.3;
+}
+
+.tab-editor {
+  line-height: 1.6;
+  color: #555;
+}
+
+.tab-image-col img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  display: block;
+}
+
+/* Accordion */
+.tab-accordion-wrapper {
+  border-top: 1px solid #eee;
+  padding-top: 30px;
+  margin-top: 30px;
+}
+
+.acc-item {
+  border-bottom: 1px solid #eee;
+  margin-bottom: 0;
+  /* Stack them */
+}
+
+.acc-item:first-child {
+  border-top: 1px solid #eee;
+}
+
+.acc-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 18px;
+  font-weight: 600;
+  color: #222;
+  transition: color 0.2s;
+}
+
+.acc-header:hover {
+  color: #007bff;
+}
+
+.acc-icon {
+  font-size: 14px;
+  color: #999;
+  transition: transform 0.3s ease;
+}
+
+.acc-header.active .acc-icon {
+  transform: rotate(180deg);
+  color: inherit;
+}
+
+.acc-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.acc-inner {
+  padding-bottom: 25px;
+  color: #666;
+  line-height: 1.6;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 991px) {
+  .comp-tabs-wrapper {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .comp-tabs-sidebar {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+    padding-bottom: 0;
+    border-right: none;
+    border-bottom: 1px solid #eee;
+    position: static;
+    /* No sticky on mobile */
+    max-height: none;
+  }
+
+  .comp-tab-btn {
+    flex-shrink: 0;
+    border-left: none;
+    border-bottom: 3px solid transparent;
+    padding: 12px 15px;
+  }
+
+  .comp-tab-btn.active {
+    background: transparent;
+    border-left: none;
+    border-bottom-color: currentColor;
+  }
+
+  .tab-content-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
 }
