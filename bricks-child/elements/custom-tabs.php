@@ -134,19 +134,22 @@ class Element_Custom_Tabs extends \Bricks\Element {
         echo "<h3 class='tabs-sidebar-heading'>{$sidebarHeading}</h3>";
     }
 
-    $i = 0;
-    foreach($tabs as $tab) {
-        $isActive = ($i === 0) ? 'active' : '';
-        $label = isset($tab['tab_label']) ? $tab['tab_label'] : 'Tab ' . ($i+1);
-        
-        echo "<button type='button' class='comp-tab-btn {$isActive}' data-tab-target='{$i}' role='tab' aria-selected='" . ($isActive ? 'true' : 'false') . "'>";
-            echo "<span class='tab-btn-text'>{$label}</span>";
-            // Icons
-            echo "<span class='tab-icon-active'><i class='fas fa-chevron-right'></i></span>";
-            echo "<span class='tab-icon-inactive'><i class='fas fa-chevron-down'></i></span>";
-        echo "</button>";
-        $i++;
-    }
+   echo "<div class='comp-btns-wrapper'>";
+	$i = 0;
+	foreach($tabs as $tab) {
+		$isActive = ($i === 0) ? 'active' : '';
+		$label = isset($tab['tab_label']) ? $tab['tab_label'] : 'Tab ' . ($i+1);
+
+		echo "<button type='button' class='comp-tab-btn {$isActive}' data-tab-target='{$i}' role='tab' aria-selected='" . ($isActive ? 'true' : 'false') . "'>";
+			echo "<span class='tab-btn-text'>{$label}</span>";
+			// Icons
+			echo "<span class='tab-icon-active'><i class='fas fa-chevron-right'></i></span>";
+			echo "<span class='tab-icon-inactive'><i class='fas fa-chevron-down'></i></span>";
+		echo "</button>";
+		$i++;
+	}
+
+	echo "</div>";
     echo '</div>'; 
     echo '</div>'; // tabs-sidebar-container
 
@@ -218,11 +221,11 @@ class Element_Custom_Tabs extends \Bricks\Element {
       
       /* Heading Style */
       .tabs-sidebar-heading {
-          font-size: 24px;
+          font-size: 36px;
           font-weight: 700;
-          color: #0b3b5b; /* Dark blue/black */
-          margin-bottom: 20px;
-          line-height: 1.2;
+          color: #16567B;
+          margin-bottom: 16px;
+          line-height: 44px;
       }
       
       .comp-tab-btn {
@@ -230,32 +233,30 @@ class Element_Custom_Tabs extends \Bricks\Element {
           justify-content: space-between;
           align-items: center;
           text-align: left;
-          padding: 15px 0; /* Vertical padding only, clean look */
+          padding: 24px;
           background: transparent;
           border: none;
-          border-bottom: 1px solid #eee; /* Separator lines */
+          border-bottom: 1px solid #eee;
           cursor: pointer;
           font-weight: 400;
           font-size: 16px;
-          color: #555;
+		  line-height: 24px;
+          color: #4A4A4A;
           transition: all 0.2s ease;
           width: 100%;
       }
-      .comp-tab-btn:first-of-type {
-          border-top: 1px solid #eee; /* Top separator for first item */
-      }
       
       .comp-tab-btn:hover {
-          color: #f15a29; /* Hover color same as active */
-          background: transparent; /* No background change */
+          color: #ED4023;
+          background: transparent;
       }
       
       .comp-tab-btn.active {
           background: transparent;
-          color: #f15a29; /* Active Color (Orange) */
+          color: #ED4023;
           font-weight: 600;
           box-shadow: none;
-          border-left: none; /* Remove previous style */
+          border-left: none;
       }
       
       .tab-icon-active, .tab-icon-inactive {

@@ -409,7 +409,6 @@
   align-items: flex-start;
   /* Important for sticky sidebar */
   gap: 40px;
-  margin: 40px 0;
 }
 
 .comp-tabs-wrapper {
@@ -422,14 +421,12 @@
 }
 
 .comp-tabs-sidebar {
-  width: 250px;
+  width: 410px;
   min-width: 200px;
-  /* Prevent squishing too much */
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  border-right: 1px solid #eee;
+  gap: 0;
   padding-right: 20px;
 
   /* Sticky Sidebar */
@@ -437,7 +434,6 @@
   position: sticky;
   top: 40px;
   max-height: calc(100vh - 80px);
-  overflow-y: auto;
 }
 
 .comp-tabs-sidebar::-webkit-scrollbar {
@@ -454,7 +450,6 @@
   padding: 15px 20px;
   background: transparent;
   border: none;
-  border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
   font-size: 16px;
@@ -511,14 +506,17 @@
 
 .tab-title {
   margin-top: 0;
-  margin-bottom: 20px;
-  font-size: 24px;
-  line-height: 1.3;
+  margin-bottom: 16px;
+  font-size: 16px;
+  line-height: 24px;
+	font-weight: 600;
+  color: #16567B;
 }
 
 .tab-editor {
-  line-height: 1.6;
-  color: #555;
+  line-height: 24px;
+	font-size: 16px;
+  color: #4A4A4A;
 }
 
 .tab-image-col img {
@@ -531,7 +529,6 @@
 
 /* Accordion */
 .tab-accordion-wrapper {
-  border-top: 1px solid #eee;
   padding-top: 30px;
   margin-top: 30px;
 }
@@ -551,14 +548,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 18px 0;
+  padding: 16px 0;
   background: none;
   border: none;
   cursor: pointer;
   text-align: left;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
-  color: #222;
+	line-height: 24px;
+  color: #16567B;
   transition: color 0.2s;
 }
 
@@ -609,8 +607,7 @@
 
   .comp-tabs-sidebar {
     width: 100%;
-    flex-direction: row;
-    overflow-x: auto;
+    flex-direction: column;
     padding-bottom: 0;
     border-right: none;
     border-bottom: 1px solid #eee;
@@ -636,4 +633,21 @@
     grid-template-columns: 1fr;
     gap: 20px;
   }
+}
+@media (max-width: 768px) {
+	.tabs-wrapper {
+		display: block;
+	}
+	.comp-btns-wrapper {
+		display: flex;
+        gap: 20px;
+        overflow-x: auto !important;
+	}
+	.comp-tab-btn {
+		width: auto !important;
+		padding: 15px 0 !important;
+	}
+	.comp-tabs-body{
+		margin-top: 30px;
+	}
 }
