@@ -143,8 +143,8 @@ class Element_Custom_Tabs extends \Bricks\Element {
 		echo "<button type='button' class='comp-tab-btn {$isActive}' data-tab-target='{$i}' role='tab' aria-selected='" . ($isActive ? 'true' : 'false') . "'>";
 			echo "<span class='tab-btn-text'>{$label}</span>";
 			// Icons
-			echo "<span class='tab-icon-active'><i class='fas fa-chevron-right'></i></span>";
-			echo "<span class='tab-icon-inactive'><i class='fas fa-chevron-down'></i></span>";
+			echo '<span class="tab-icon-active"><img src="https://cpa.tiprojects.ca/wp-content/uploads/2026/02/keyboard_arrow_down-1.png" /></span>';
+			echo '<span class="tab-icon-inactive"><img src="https://cpa.tiprojects.ca/wp-content/uploads/2026/02/keyboard_arrow_down.png" /></span>';
 		echo "</button>";
 		$i++;
 	}
@@ -183,7 +183,7 @@ class Element_Custom_Tabs extends \Bricks\Element {
                     echo '<div class="acc-item">';
                         echo '<button class="acc-header" type="button">';
                             echo '<span class="acc-title-text">' . esc_html($accTitle) . '</span>';
-                            echo '<span class="acc-icon"><i class="fas fa-chevron-down"></i></span>';
+                            echo '<span class="acc-icon"><img src="https://cpa.tiprojects.ca/wp-content/uploads/2026/02/keyboard_arrow_down-2.png"/></span>';
                         echo '</button>';
                         echo '<div class="acc-body">';
                             echo '<div class="acc-inner">';
