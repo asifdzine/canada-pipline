@@ -402,8 +402,6 @@
   }
 }
 
-
-
 .tabs-sidebar-container {
   display: flex;
   align-items: flex-start;
@@ -433,7 +431,6 @@
   position: -webkit-sticky;
   position: sticky;
   top: 40px;
-  max-height: calc(100vh - 80px);
 }
 
 .comp-tabs-sidebar::-webkit-scrollbar {
@@ -509,14 +506,14 @@
   margin-bottom: 16px;
   font-size: 16px;
   line-height: 24px;
-	font-weight: 600;
-  color: #16567B;
+  font-weight: 600;
+  color: #16567b;
 }
 
 .tab-editor {
   line-height: 24px;
-	font-size: 16px;
-  color: #4A4A4A;
+  font-size: 16px;
+  color: #4a4a4a;
 }
 
 .tab-image-col img {
@@ -555,8 +552,8 @@
   text-align: left;
   font-size: 16px;
   font-weight: 600;
-	line-height: 24px;
-  color: #16567B;
+  line-height: 24px;
+  color: #16567b;
   transition: color 0.2s;
 }
 
@@ -635,19 +632,19 @@
   }
 }
 @media (max-width: 768px) {
-	.tabs-wrapper {
-		display: block;
-	}
-	.comp-btns-wrapper {
-		display: flex;
-        gap: 20px;
-        overflow-x: auto !important;
-	}
-	.comp-tab-btn {
-		width: auto !important;
-		padding: 15px 0 !important;
-	}
-	.comp-tabs-body{
-		margin-top: 30px;
-	}
+  .tabs-wrapper {
+    display: block;
+  }
+  .comp-btns-wrapper {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto !important;
+  }
+  .comp-tab-btn {
+    width: auto !important;
+    padding: 15px 0 !important;
+  }
+  .comp-tabs-body {
+    margin-top: 30px;
+  }
 }
