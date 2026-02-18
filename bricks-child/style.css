@@ -453,6 +453,7 @@
   color: #555;
   transition: all 0.2s ease;
   border-left: 3px solid transparent;
+  gap: 10px;
   /* Left border indicator */
 }
 
