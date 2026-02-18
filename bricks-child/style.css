@@ -631,20 +631,31 @@
     gap: 20px;
   }
 }
+
 @media (max-width: 768px) {
   .tabs-wrapper {
     display: block;
   }
+
   .comp-btns-wrapper {
     display: flex;
     gap: 20px;
     overflow-x: auto !important;
   }
+
   .comp-tab-btn {
     width: auto !important;
     padding: 15px 0 !important;
   }
+
   .comp-tabs-body {
     margin-top: 30px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .blog-post:nth-child(even) {
+    flex-direction: row-reverse !important;
+    justify-content: flex-end !important;
   }
 }
