@@ -660,3 +660,51 @@
     justify-content: flex-end !important;
   }
 }
+
+
+body .custom-search .close {
+  font-size: 30px;
+  width: 50px;
+  height: 46px !important;
+  border: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0 5px 0;
+  border-radius: 100px;
+}
+
+body .custom-search .toggle {
+  height: 36px !important;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 32px;
+  width: auto;
+}
+
+@media (max-width: 768px) {
+  body .custom-search .toggle {
+    padding: 0 13px;
+    border-radius: 100px;
+  }
+}
+
+
+
+@media (min-width: 1024px) {
+  body .custom-search .toggle i {
+    display: none;
+  }
+
+  body .custom-search .toggle::before {
+    content: "Search";
+  }
+}
+
+
+body .custom-search .bricks-search-overlay .bricks-search-inner {
+  max-width: 80%;
+  margin: 0 auto;
+}
