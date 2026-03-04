@@ -125,6 +125,10 @@ class Element_PDF_Tech_Notes extends \Bricks\Element {
 
     // Right: Preview
     echo '<div class="tech-note-preview-container">';
+    echo '<div class="tech-note-preview-header">';
+    // echo '<span class="tech-note-preview-title">' . $first_pdf . '</span>';
+    echo '<a href="' . $first_pdf . '" download class="tech-note-preview-download">Download Now</a>';
+    echo '</div>';
     // Append parameters to hide sidebar/toolbar
     $src = $first_pdf . '#toolbar=0&navpanes=0&scrollbar=0';
     echo "<iframe id='tech-note-frame-{$this->id}' class='tech-note-frame' src='{$src}' style='height: {$height};' width='100%'></iframe>";
@@ -152,11 +156,16 @@ class Element_PDF_Tech_Notes extends \Bricks\Element {
                   if (!parentWrapper) return;
 
                   const iframe = parentWrapper.querySelector('.tech-note-frame');
+                  const downloadLink = parentWrapper.querySelector('.tech-note-preview-download');
                   const pdfUrl = this.getAttribute('data-pdf');
 
                   if (iframe && pdfUrl) {
                       // Append parameters to hide sidebar/toolbar
                       iframe.src = pdfUrl + '#toolbar=0&navpanes=0&scrollbar=0';
+                  }
+
+                  if (downloadLink && pdfUrl) {
+                      downloadLink.href = pdfUrl;
                   }
 
                   // Update active class

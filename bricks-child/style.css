@@ -370,7 +370,7 @@
 
 .tech-note-preview-container {
   flex-grow: 1;
-  background: #f4f4f4;
+  /* background: #f4f4f4; */
   min-height: 400px;
   border-radius: 4px;
   overflow: hidden;
@@ -381,6 +381,35 @@
   width: 100%;
   border: none;
   display: block;
+}
+
+.tech-note-preview-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px 0;
+}
+
+.tech-note-preview-download {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold !important;
+  gap: 8px;
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #ed4023;
+  color: #ed4023;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: 400;
+  transition: all 0.2s;
+  font-size: 14px;
+  line-height: 20px;
+  width: 350px;
+}
+
+.tech-note-preview-download:hover {
+  background: #f8b3a7;
 }
 
 /* Mobile Responsive */
@@ -398,6 +427,10 @@
   }
 
   .tech-note-preview-container {
+    width: 100%;
+  }
+
+  .tech-note-preview-download {
     width: 100%;
   }
 }
@@ -707,4 +740,9 @@ body .custom-search .toggle {
 body .custom-search .bricks-search-overlay .bricks-search-inner {
   max-width: 80%;
   margin: 0 auto;
+}
+
+
+.swiper-pagination-lock {
+  display: none;
 }
