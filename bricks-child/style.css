@@ -533,6 +533,8 @@
 .tabs-wrapper {
   display: flex;
   gap: 40px;
+  font-family: "Montserrat", sans-serif;
+
 }
 
 .tab-title {
