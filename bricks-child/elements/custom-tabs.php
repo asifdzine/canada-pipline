@@ -261,6 +261,7 @@ class Element_Custom_Tabs extends \Bricks\Element {
       
       .tab-icon-active, .tab-icon-inactive {
           font-size: 12px;
+          min-width: 12px;
       }
       
       .comp-tab-btn.active .tab-icon-inactive { display: none; }
